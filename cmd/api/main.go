@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	"greenlight.thatopsguy.xyz/internal/data"
 	"log/slog"
 	"net/http"
 	"os"
@@ -37,6 +38,7 @@ type config struct {
 type application struct {
 	config config
 	logger *slog.Logger
+	models data.Models
 }
 
 func main() {
@@ -82,9 +84,12 @@ func main() {
 
 	// Declare an instance of the application struct, containing the config struct and
 	// the logger.
+	// Use the data.NewModels() function to initialize a Models struct, passing in the
+	// connection pool as a parameter.
 	app := &application{
 		config: cfg,
 		logger: logger,
+		models: data.NewModels(db),
 	}
 
 	// Declare an HTTP server which listens on the port provided in the config struct,
